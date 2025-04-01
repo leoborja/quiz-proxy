@@ -1,1 +1,1 @@
-{"version":2,"builds":[{"src":"api/**/*.ts","use":"@vercel/node"}],"routes":[{"src":"/","dest":"/api/proxy"},{"src":"/go-us-shein-spa","dest":"/api/proxy"},{"src":"/(.*)", "dest":"/api/proxy"}]}
+{"version":2,"builds":[{"src":"api/**/*.ts","use":"@vercel/node"}],"routes":[{"src":"/","dest":"/go-us-shein-spa/"},{"src":"/go-us-shein-spa","dest":"/go-us-shein-spa/"},{"src":"/go-us-shein-spa/","dest":"/api/proxy"},{"src":"/(.*)", "dest":"/api/proxy"}]}
