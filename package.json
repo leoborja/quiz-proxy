@@ -1,0 +1,1 @@
+{"name":"quiz-proxy","version":"1.0.0","private":true,"scripts":{"start":"vercel dev","build":"vercel build"},"dependencies":{"@vercel/node":"^3.0.0"}}

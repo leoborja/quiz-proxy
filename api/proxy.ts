@@ -1,21 +1,26 @@
-export default async function handler(req, res) {
-  const path = req.url || "/";
-  const cleanPath = path.replace(/^\/quiz_v1\//, "");
-  const githubUrl = `https://leoborja.github.io/quiz_v1/${cleanPath}`;
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
+    // Sempre busca o conteúdo de go-us-shein-spa
+    const githubUrl = "https://leoborja.github.io/quiz_v1/go-us-shein-spa/";
+    
     const response = await fetch(githubUrl);
-    const text = await response.text();
+    if (!response.ok) {
+      throw new Error(`GitHub Pages returned ${response.status}`);
+    }
 
-    const modifiedText = text.replace(/(href|src)="([^"]*)"/g, (match, attr, path) => {
-      if (path.startsWith("http")) return match;
-      if (path.startsWith("//")) return match;
-      return `${attr}="https://leoborja.github.io/quiz_v1/${path.replace(/^\//, "")}"`;
-    });
+    const contentType = response.headers.get("content-type");
+    const content = await response.text();
 
-    res.setHeader("Content-Type", "text/html");
-    res.status(200).send(modifiedText);
-  } catch (err) {
-    res.status(500).send("Erro ao buscar conteúdo do GitHub Pages");
+    // Define os headers apropriados
+    res.setHeader("Content-Type", contentType || "text/html; charset=utf-8");
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    
+    // Retorna o conteúdo
+    res.status(200).send(content);
+  } catch (error) {
+    console.error("Proxy error:", error);
+    res.status(500).json({ error: "Failed to fetch content" });
   }
 }
